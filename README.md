@@ -153,7 +153,7 @@ From the home directory, we capture the user flag.
 We check the `/var/backups` directory for sensitive leftover files.
 > cyber@breakout:~$ ls -alps /var/backups
 
-<p align="center"> <img src="http://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s14.png" alt="Backup File Enumeration" width="600"/> </p>
+<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s14.png" alt="Backup file enumeration" width="600"/> </p>
 
 *Screenshot 11: Identifying the `.old_pass.bak` file*
 
@@ -180,9 +180,6 @@ We attempt to use this string as the password for the root user.
 > root@breakout:/root# ls
 > r00t.txt
 > root@breakout:/root# cat r00t.txt
----
-
-**Root Flag:** (Captured successfully upon reading `r00t.txt`)
 ---
 
 ## 🔒 Security Recommendations
