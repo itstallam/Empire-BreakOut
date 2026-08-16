@@ -133,16 +133,17 @@ We craft a reverse shell payload to connect back to our attacker machine.
 ### **Upgrading the Shell**
 We upgrade the limited shell to a fully interactive TTY session for better navigation.
 > cyber@breakout:~$ python3 -c "import pty;pty.spawn('/bin/bash')"
+
 > cyber@breakout:~$ export TERM=xterm
 
 ## 5. User Flag.
 ### **Capturing User Flag**
 From the home directory, we capture the user flag.
-
 > cyber@breakout:~$ ls
-> user.txt
-> cyber@breakout:~$ cat user.txt
 
+> user.txt
+
+> cyber@breakout:~$ cat user.txt
 ---
 
 **User Flag:** `3mp1r3{You_Manage_To_Break_To_My_Secure_Access}`
@@ -177,9 +178,13 @@ We attempt to use this string as the password for the root user.
 ## 7. Root Flag.
 ### **Capturing Root Flag**
 > root@breakout:/var/backups# cd /root
+
 > root@breakout:/root# ls
+
 > r00t.txt
+
 > root@breakout:/root# cat r00t.txt
+
 ---
 
 ## 🔒 Security Recommendations
