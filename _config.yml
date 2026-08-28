@@ -1,0 +1,5 @@
+theme: jekyll-theme-hacker
+title: EMPIRE BREAKOUT
+description: Empire Breakout Penetration Testing Walkthrough.
+show_downloads: false
+baseurl: "/Empire-BreakOut"
