@@ -1,9 +1,10 @@
-theme: jekyll-theme-midnight
+theme: jekyll-theme-slate
 title: "EMPIRE BREAKOUT"
 description: "Empire Breakout Penetration Testing Walkthrough."
 show_downloads: false
 baseurl: "/Empire-BreakOut"
 url: ""
+
 
 plugins:
   - jekyll-feed
