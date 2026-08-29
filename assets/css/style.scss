@@ -1,124 +1,103 @@
+
+
 ---
 ---
 
-@import "jekyll-theme-minimal"; 
+@import "jekyll-theme-architect";
 
-/* DARK OVERRIDE: Minimal Void */
+/* DARK OVERRIDE: Architect Brutalist (matches real architect theme markup) */
 
 html,
 body {
-  background-color: #0a0c09 !important;
-  color: #e8e6dc !important;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  background-color: #0c0b09 !important;
+  color: #f0ebe3 !important;
+  font-family: 'Roboto Condensed', 'Arial Narrow', sans-serif !important;
 }
 
-.container,
-.wrapper,
-#main-content,
-.page-content,
-.markdown-body,
-.post-content,
-article,
-section {
-  background: #12140f !important;
-  background-color: #12140f !important;
-  color: #e8e6dc !important;
-  border: 1px solid #262a1e !important;
+header,
+header .inner {
+  background: #0c0b09 !important;
+  color: #f0ebe3 !important;
+}
+header h1, header h2 {
+  color: #f59e0b !important;
+  font-family: 'Oswald', 'Bebas Neue', Impact, sans-serif !important;
 }
 
-h1, h2, h3, h4, h5, h6,
-.project-name,
-.page-header .project-name,
-header h1, header h2,
-.post-title {
-  color: #ffb000 !important;
-  font-family: 'IBM Plex Mono', ui-monospace, monospace !important;
+header .button {
+  background: #151310 !important;
+  border: 1px solid #f59e0b !important;
+  color: #f59e0b !important;
+}
+header .button:hover {
+  background: #f59e0b !important;
+  color: #0c0b09 !important;
 }
 
-a,
-.markdown-body a,
-.post-content a {
-  color: #ffb000 !important;
+#content-wrapper,
+#content-wrapper .inner {
+  background: #0c0b09 !important;
+}
+
+#main-content {
+  background: #151310 !important;
+  background-color: #151310 !important;
+  color: #f0ebe3 !important;
+  border: 1px solid #2c2720 !important;
+  padding: 20px !important;
+}
+
+#main-content h1, #main-content h2, #main-content h3,
+#main-content h4, #main-content h5, #main-content h6 {
+  color: #f59e0b !important;
+  font-family: 'Oswald', 'Bebas Neue', Impact, sans-serif !important;
+}
+
+#main-content a {
+  color: #f59e0b !important;
   text-decoration: none !important;
 }
-a:hover,
-.markdown-body a:hover {
-  color: #ff5a4e !important;
+#main-content a:hover {
+  color: #ef4444 !important;
   text-decoration: underline !important;
 }
 
-pre, code,
-.highlight pre,
-.highlight code,
-.markdown-body pre,
-.markdown-body code {
-  background: #0d0f0a !important;
-  background-color: #0d0f0a !important;
-  border: 1px solid #262a1e !important;
-  color: #ffb000 !important;
+#main-content pre,
+#main-content code {
+  background: #110f0c !important;
+  border: 1px solid #2c2720 !important;
+  color: #f59e0b !important;
   font-family: 'IBM Plex Mono', 'Fira Code', monospace !important;
 }
 
-table,
-.markdown-body table {
-  background: #12140f !important;
-  background-color: #12140f !important;
-  border: 1px solid #262a1e !important;
+#main-content table {
+  background: #151310 !important;
+  border: 1px solid #2c2720 !important;
 }
-th, td,
-.markdown-body th,
-.markdown-body td {
-  border: 1px solid #262a1e !important;
+#main-content th, #main-content td {
+  border: 1px solid #2c2720 !important;
 }
-th,
-.markdown-body th {
-  background: #0d0f0a !important;
-  background-color: #0d0f0a !important;
-  color: #ffb000 !important;
+#main-content th {
+  background: #110f0c !important;
+  color: #f59e0b !important;
 }
 
-hr,
-.markdown-body hr {
-  border: 0 !important;
-  border-top: 1px solid #262a1e !important;
+#sidebar {
+  background: #151310 !important;
+  border: 1px solid #2c2720 !important;
+  color: #f0ebe3 !important;
 }
-
-.btn,
-button,
-.markdown-body .btn {
-  background: #12140f !important;
-  background-color: #12140f !important;
-  border: 1px solid #ffb000 !important;
-  color: #ffb000 !important;
+#sidebar .button {
+  background: #0c0b09 !important;
+  border: 1px solid #f59e0b !important;
+  color: #f59e0b !important;
 }
-.btn:hover,
-button:hover {
-  background: #ffb000 !important;
-  background-color: #ffb000 !important;
-  color: #0a0c09 !important;
+#sidebar .button:hover {
+  background: #f59e0b !important;
+  color: #0c0b09 !important;
 }
 
 ::selection {
-  background: #ffb000 !important;
-  color: #0a0c09 !important;
-}
-
-ul, ol, li,
-.markdown-body ul,
-.markdown-body ol,
-.markdown-body li {
-  color: #e8e6dc !important;
-}
-
-p, span, div,
-.markdown-body p,
-.markdown-body span {
-  color: #e8e6dc !important;
-}
-
-.page-header,
-header {
-  background: #12140f !important;
-  background-color: #12140f !important;
-  border-bottom: 1px solid #262a1e !important;
+  background: #f59e0b !important;
+  color: #0c0b09 !important;
 }
