@@ -1,15 +1,15 @@
 ---
 ---
 
-@import "jekyll-theme-slate";
+@import "jekyll-theme-midnight";
 
-/* DARK OVERRIDE: Slate Obsidian */
+/* DARK OVERRIDE: Midnight Abyss */
 
 html,
 body {
-  background-color: #090908 !important;
-  color: #f2efe9 !important;
-  font-family: 'Inter', 'Roboto', sans-serif !important;
+  background-color: #02080f !important;
+  color: #c8e6f5 !important;
+  font-family: 'Inter', 'Helvetica Neue', sans-serif !important;
 }
 
 .container,
@@ -20,10 +20,10 @@ body {
 .post-content,
 article,
 section {
-  background: #121110 !important;
-  background-color: #121110 !important;
-  color: #f2efe9 !important;
-  border: 1px solid #252320 !important;
+  background: #06121f !important;
+  background-color: #06121f !important;
+  color: #c8e6f5 !important;
+  border: 1px solid #0f2b3d !important;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -31,19 +31,19 @@ h1, h2, h3, h4, h5, h6,
 .page-header .project-name,
 header h1, header h2,
 .post-title {
-  color: #d4af37 !important;
-  font-family: 'Cinzel', 'Playfair Display', serif !important;
+  color: #00e5ff !important;
+  font-family: 'Montserrat', 'Inter', sans-serif !important;
 }
 
 a,
 .markdown-body a,
 .post-content a {
-  color: #d4af37 !important;
+  color: #00e5ff !important;
   text-decoration: none !important;
 }
 a:hover,
 .markdown-body a:hover {
-  color: #ef4444 !important;
+  color: #a78bfa !important;
   text-decoration: underline !important;
 }
 
@@ -52,73 +52,73 @@ pre, code,
 .highlight code,
 .markdown-body pre,
 .markdown-body code {
-  background: #0e0d0b !important;
-  background-color: #0e0d0b !important;
-  border: 1px solid #252320 !important;
-  color: #d4af37 !important;
+  background: #030d14 !important;
+  background-color: #030d14 !important;
+  border: 1px solid #0f2b3d !important;
+  color: #00e5ff !important;
   font-family: 'IBM Plex Mono', 'Fira Code', monospace !important;
 }
 
 table,
 .markdown-body table {
-  background: #121110 !important;
-  background-color: #121110 !important;
-  border: 1px solid #252320 !important;
+  background: #06121f !important;
+  background-color: #06121f !important;
+  border: 1px solid #0f2b3d !important;
 }
 th, td,
 .markdown-body th,
 .markdown-body td {
-  border: 1px solid #252320 !important;
+  border: 1px solid #0f2b3d !important;
 }
 th,
 .markdown-body th {
-  background: #0e0d0b !important;
-  background-color: #0e0d0b !important;
-  color: #d4af37 !important;
+  background: #030d14 !important;
+  background-color: #030d14 !important;
+  color: #00e5ff !important;
 }
 
 hr,
 .markdown-body hr {
   border: 0 !important;
-  border-top: 1px solid #252320 !important;
+  border-top: 1px solid #0f2b3d !important;
 }
 
 .btn,
 button,
 .markdown-body .btn {
-  background: #121110 !important;
-  background-color: #121110 !important;
-  border: 1px solid #d4af37 !important;
-  color: #d4af37 !important;
+  background: #06121f !important;
+  background-color: #06121f !important;
+  border: 1px solid #00e5ff !important;
+  color: #00e5ff !important;
 }
 .btn:hover,
 button:hover {
-  background: #d4af37 !important;
-  background-color: #d4af37 !important;
-  color: #090908 !important;
+  background: #00e5ff !important;
+  background-color: #00e5ff !important;
+  color: #02080f !important;
 }
 
 ::selection {
-  background: #d4af37 !important;
-  color: #090908 !important;
+  background: #00e5ff !important;
+  color: #02080f !important;
 }
 
 ul, ol, li,
 .markdown-body ul,
 .markdown-body ol,
 .markdown-body li {
-  color: #f2efe9 !important;
+  color: #c8e6f5 !important;
 }
 
 p, span, div,
 .markdown-body p,
 .markdown-body span {
-  color: #f2efe9 !important;
+  color: #c8e6f5 !important;
 }
 
 .page-header,
 header {
-  background: #121110 !important;
-  background-color: #121110 !important;
-  border-bottom: 1px solid #252320 !important;
+  background: #06121f !important;
+  background-color: #06121f !important;
+  border-bottom: 1px solid #0f2b3d !important;
 }
