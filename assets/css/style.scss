@@ -1,88 +1,102 @@
+
 ---
 ---
 
-@import "jekyll-theme-slate"; 
+@import "jekyll-theme-architect";
 
-/* DARK OVERRIDE: Slate Obsidian (matches real slate theme markup) */
+/* DARK OVERRIDE: Architect Brutalist (matches real architect theme markup) */
 
 html,
 body {
-  background-color: #090908 !important;
-  color: #f2efe9 !important;
-  font-family: 'Inter', 'Roboto', sans-serif !important;
+  background-color: #0c0b09 !important;
+  color: #f0ebe3 !important;
+  font-family: 'Roboto Condensed', 'Arial Narrow', sans-serif !important;
 }
 
-#header_wrap,
-#main_content_wrap,
-#footer_wrap {
-  background: #090908 !important;
-  background-color: #090908 !important;
+header,
+header .inner {
+  background: #0c0b09 !important;
+  color: #f0ebe3 !important;
+}
+header h1, header h2 {
+  color: #f59e0b !important;
+  font-family: 'Oswald', 'Bebas Neue', Impact, sans-serif !important;
 }
 
-#project_title,
-#project_tagline {
-  color: #d4af37 !important;
-  font-family: 'Cinzel', 'Playfair Display', serif !important;
+header .button {
+  background: #151310 !important;
+  border: 1px solid #f59e0b !important;
+  color: #f59e0b !important;
+}
+header .button:hover {
+  background: #f59e0b !important;
+  color: #0c0b09 !important;
 }
 
-#forkme_banner {
-  background: #d4af37 !important;
-  color: #090908 !important;
+#content-wrapper,
+#content-wrapper .inner {
+  background: #0c0b09 !important;
 }
 
-#downloads a {
-  color: #d4af37 !important;
-}
-
-#main_content {
-  background: #121110 !important;
-  background-color: #121110 !important;
-  color: #f2efe9 !important;
-  border: 1px solid #252320 !important;
+#main-content {
+  background: #151310 !important;
+  background-color: #151310 !important;
+  color: #f0ebe3 !important;
+  border: 1px solid #2c2720 !important;
   padding: 20px !important;
 }
 
-#main_content h1, #main_content h2, #main_content h3,
-#main_content h4, #main_content h5, #main_content h6 {
-  color: #d4af37 !important;
-  font-family: 'Cinzel', 'Playfair Display', serif !important;
+#main-content h1, #main-content h2, #main-content h3,
+#main-content h4, #main-content h5, #main-content h6 {
+  color: #f59e0b !important;
+  font-family: 'Oswald', 'Bebas Neue', Impact, sans-serif !important;
 }
 
-#main_content a {
-  color: #d4af37 !important;
+#main-content a {
+  color: #f59e0b !important;
   text-decoration: none !important;
 }
-#main_content a:hover {
+#main-content a:hover {
   color: #ef4444 !important;
   text-decoration: underline !important;
 }
 
-#main_content pre,
-#main_content code {
-  background: #0e0d0b !important;
-  border: 1px solid #252320 !important;
-  color: #d4af37 !important;
+#main-content pre,
+#main-content code {
+  background: #110f0c !important;
+  border: 1px solid #2c2720 !important;
+  color: #f59e0b !important;
   font-family: 'IBM Plex Mono', 'Fira Code', monospace !important;
 }
 
-#main_content table {
-  background: #121110 !important;
-  border: 1px solid #252320 !important;
+#main-content table {
+  background: #151310 !important;
+  border: 1px solid #2c2720 !important;
 }
-#main_content th, #main_content td {
-  border: 1px solid #252320 !important;
+#main-content th, #main-content td {
+  border: 1px solid #2c2720 !important;
 }
-#main_content th {
-  background: #0e0d0b !important;
-  color: #d4af37 !important;
+#main-content th {
+  background: #110f0c !important;
+  color: #f59e0b !important;
+}
+
+#sidebar {
+  background: #151310 !important;
+  border: 1px solid #2c2720 !important;
+  color: #f0ebe3 !important;
+}
+#sidebar .button {
+  background: #0c0b09 !important;
+  border: 1px solid #f59e0b !important;
+  color: #f59e0b !important;
+}
+#sidebar .button:hover {
+  background: #f59e0b !important;
+  color: #0c0b09 !important;
 }
 
 ::selection {
-  background: #d4af37 !important;
-  color: #090908 !important;
-}
-
-.copyright,
-#footer_wrap p {
-  color: #8a8378 !important;
+  background: #f59e0b !important;
+  color: #0c0b09 !important;
 }
